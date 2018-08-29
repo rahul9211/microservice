@@ -1,1 +1,8 @@
 THIS IS A GIT REPO
+1.Here you'll have to build your docker file manually.
+2.once all images are created you can run the startservice.sh
+3.now the container will up.
+4.once containers are up,create database 'studentDB','courseDB' following mysql container.
+
+you may go for swagger or follow path to zull.
+post some value and you are good to go!
