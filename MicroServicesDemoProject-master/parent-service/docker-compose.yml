@@ -1,0 +1,100 @@
+version: '3'
+
+services:
+
+    mysql-1:
+        container_name: mysql-docker-container
+        hostname: core-mysql.database
+        image: mysql:5.6
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+          - MYSQL_ROOT_PASSWORD=root123
+
+    eureka-server:
+
+        image: discovery-service:latest
+        expose:
+
+            - 8760
+
+        ports:
+
+            - 8760:8760
+
+    courseService:
+
+        image: course-service:latest
+
+        expose:
+
+            - 4444
+
+        ports:
+
+            - 4444:4444
+
+        links:
+
+            - mysql-1:core-mysql.database
+            - eureka-server:eureka-server
+
+        depends_on:
+
+            - eureka-server
+
+        logging:
+
+            driver: json-file
+
+    studentService:
+
+        image: student-service:latest
+
+        expose:
+
+            - 3333
+
+        ports:
+
+            - 3333:3333
+
+        links:
+
+            - mysql-1:core-mysql.database
+            - eureka-server:eureka-server
+
+        depends_on:
+
+            - eureka-server
+
+        logging:
+
+            driver: json-file
+
+    ZuulServer:
+
+        image: gateway-service:latest
+
+        expose:
+
+            - 8765
+
+        ports:
+
+            - 8765:8765
+
+        links:
+
+            - eureka-server:eureka-server
+            - studentService:studentService
+            - courseService:courseService
+
+        depends_on:
+
+            - eureka-server
+
+        logging:
+
+            driver: json-file
